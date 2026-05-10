@@ -577,6 +577,11 @@ if st.session_state.step == 0:
     if st.button("🚀 테스트 시작하기"):
         st.session_state.step = 1
         st.rerun()
+    
+    st.markdown(
+        "<p style='text-align: center; color: #aaa; font-size: 13px; margin-top: 10px;'>made by 대학원홍보단 ㅊㅇㄱ</p>",
+        unsafe_allow_html=True
+    )
 
 # (2) 질문 진행 화면
 elif 1 <= st.session_state.step <= 12:
