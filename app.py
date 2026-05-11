@@ -870,7 +870,7 @@ else:
     # 다시 테스트 + 링크 복사
     col_a, col_b = st.columns(2)
     with col_a:
-        if st.button("🔄 다시 테스트하기"):
+        if st.button("🔄 다시 테스트"):
             st.session_state.step = 0
             st.session_state.scores = {"E": 0, "I": 0, "D": 0, "T": 0, "P": 0, "A": 0, "S": 0, "F": 0}
             st.session_state.answer_history = []
@@ -879,7 +879,7 @@ else:
             st.rerun()
     with col_b:
         share_url = "https://your-app-url.com"  # 실제 배포 URL로 변경
-        if st.button("🔗 테스트 링크 복사하기"):
+        if st.button("🔗 테스트 링크 복사"):
             st.code(share_url, language=None)
             st.success("링크를 복사해서 친구들과 공유하세요! 📤")
     
