@@ -101,21 +101,10 @@ st.markdown("""
     }
     
     /* 다시 테스트 버튼 */
-    div[data-testid="column"]:nth-of-type(1) .stButton>button {
-        background: linear-gradient(135deg, #a8a8a8 0%, #6c6c6c 100%);
-        box-shadow: 0 4px 15px rgba(108, 108, 108, 0.4);
-    }
-    div[data-testid="column"]:nth-of-type(1) .stButton>button:hover {
-        box-shadow: 0 6px 20px rgba(108, 108, 108, 0.6);
-    }
-    
-    /* 링크 복사 버튼 */
-    div[data-testid="column"]:nth-of-type(2) .stButton>button {
-        background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
-        box-shadow: 0 4px 15px rgba(67, 206, 162, 0.4);
-    }
-    div[data-testid="column"]:nth-of-type(2) .stButton>button:hover {
-        box-shadow: 0 6px 20px rgba(67, 206, 162, 0.6);
+    button[kind="secondary"][data-testid="baseButton-secondary"]:first-of-type,
+    .stButton:has(button[key="retry"]) > button {
+        background: linear-gradient(135deg, #a8a8a8 0%, #6c6c6c 100%) !important;
+        box-shadow: 0 4px 15px rgba(108, 108, 108, 0.4) !important;
     }
     
     /* 질문 박스 */
@@ -578,7 +567,7 @@ if 'step' not in st.session_state:
 # --- 5. 화면 렌더링 ---
 # (1) 인트로 화면
 if st.session_state.step == 0:
-    st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 5px;'></div>", unsafe_allow_html=True)
     if os.path.exists("univ_bg.png"):
         st.image("univ_bg.png", use_container_width=True)
     
@@ -706,7 +695,7 @@ else:
     my_count = stats["types"].get(mbti, 0)
     my_pct = round(my_count / total * 100, 1)
 
-    st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 5px;'></div>", unsafe_allow_html=True)
     st.markdown(
         f"""
         <div class='question-box' style='text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;'>
@@ -888,7 +877,7 @@ else:
     # 다시 테스트 + 링크 복사
     col_a, col_b = st.columns(2)
     with col_a:
-        if st.button("🔄 다시 테스트"):
+        if st.button("🔄 다시 테스트", key="retry"):
             st.session_state.step = 0
             st.session_state.scores = {"E": 0, "I": 0, "D": 0, "T": 0, "P": 0, "A": 0, "S": 0, "F": 0}
             st.session_state.answer_history = []
