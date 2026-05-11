@@ -586,6 +586,7 @@ if 'step' not in st.session_state:
 # --- 5. 화면 렌더링 ---
 # (1) 인트로 화면
 if st.session_state.step == 0:
+    st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     if os.path.exists("univ_bg.png"):
         st.image("univ_bg.png", use_container_width=True)
     
@@ -713,6 +714,7 @@ else:
     my_count = stats["types"].get(mbti, 0)
     my_pct = round(my_count / total * 100, 1)
 
+    st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     st.markdown(
         f"""
         <div class='question-box' style='text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;'>
