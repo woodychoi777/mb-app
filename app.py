@@ -108,21 +108,8 @@ st.markdown("""
         box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
     }
     
-    /* 시작 버튼 크게 + 중앙 */
-    [data-testid="stButton"] button[kind="primary"],
-    div:has(> [data-testid="stButton"]) {
-        display: flex;
-        justify-content: center;
-    }
-    [data-testid="stButton"] button[kind="primary"] {
-        width: 80% !important;
-        font-size: 18px !important;
-        padding: 18px 20px !important;
-        font-weight: 700 !important;
-        border-radius: 30px !important;
-    }
-    
     /* 다시 테스트 버튼 */
+    button[kind="secondary"][data-testid="baseButton-secondary"]:first-of-type,
     .stButton:has(button[key="retry"]) > button {
         background: linear-gradient(135deg, #a8a8a8 0%, #6c6c6c 100%) !important;
         box-shadow: 0 4px 15px rgba(108, 108, 108, 0.4) !important;
@@ -616,9 +603,9 @@ if st.session_state.step == 0:
         unsafe_allow_html=True
     )
     
-    col1, col2, col3 = st.columns([0.5, 4, 0.5])
+    col1, col2, col3 = st.columns([1, 3, 1])
     with col2:
-        if st.button("🚀 테스트 시작하기", key="start_btn", type="primary"):
+        if st.button("🚀 테스트 시작하기", key="start_btn"):
             st.session_state.step = 1
             st.rerun()
     
