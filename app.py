@@ -81,23 +81,41 @@ st.markdown("""
     .stButton>button {
         width: 100%;
         border-radius: 25px;
-        padding: 18px 20px;
+        padding: 14px 10px;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 600;
         margin: 8px 0;
         border: none;
         box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         transition: all 0.3s ease;
-        text-align: left;
-        line-height: 1.5;
+        text-align: center;
+        line-height: 1.4;
         word-wrap: break-word;
         white-space: normal;
     }
     .stButton>button:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+    
+    /* 다시 테스트 버튼 */
+    div[data-testid="column"]:nth-of-type(1) .stButton>button {
+        background: linear-gradient(135deg, #a8a8a8 0%, #6c6c6c 100%);
+        box-shadow: 0 4px 15px rgba(108, 108, 108, 0.4);
+    }
+    div[data-testid="column"]:nth-of-type(1) .stButton>button:hover {
+        box-shadow: 0 6px 20px rgba(108, 108, 108, 0.6);
+    }
+    
+    /* 링크 복사 버튼 */
+    div[data-testid="column"]:nth-of-type(2) .stButton>button {
+        background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+        box-shadow: 0 4px 15px rgba(67, 206, 162, 0.4);
+    }
+    div[data-testid="column"]:nth-of-type(2) .stButton>button:hover {
+        box-shadow: 0 6px 20px rgba(67, 206, 162, 0.6);
     }
     
     /* 질문 박스 */
