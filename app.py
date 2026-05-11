@@ -602,9 +602,12 @@ if st.session_state.step == 0:
         """,
         unsafe_allow_html=True
     )
-    if st.button("🚀 테스트 시작하기"):
-        st.session_state.step = 1
-        st.rerun()
+    
+    col1, col2, col3 = st.columns([1, 3, 1])
+    with col2:
+        if st.button("🚀 테스트 시작하기", key="start_btn"):
+            st.session_state.step = 1
+            st.rerun()
     
     st.markdown(
         "<p style='text-align: center; color: #aaa; font-size: 13px; margin-top: 10px;'>made by 대학원 홍보단 최원걸</p>",
