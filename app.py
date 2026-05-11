@@ -26,6 +26,14 @@ hide_streamlit_style = """
                 visibility: hidden;
             }
 
+            /* 상단 기본 패딩 제거 */
+            [data-testid="stAppViewContainer"] > section:first-child {
+                padding-top: 10px !important;
+            }
+            .block-container {
+                padding-top: 10px !important;
+            }
+
             /* 혹시 모를 툴바 강제 숨김 */
             [data-testid="stToolbar"] {
                 visibility: hidden !important;
