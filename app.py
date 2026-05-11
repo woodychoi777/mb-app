@@ -1,6 +1,19 @@
 import streamlit as st
 import base64
 import os
+import json
+
+STATS_FILE = "stats.json"
+
+def load_stats():
+    if os.path.exists(STATS_FILE):
+        with open(STATS_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return {"total": 0, "types": {}}
+
+def save_stats(stats):
+    with open(STATS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(stats, f, ensure_ascii=False)
 
 # --- 1. 페이지 기본 설정 ---
 st.set_page_config(page_title="나의 연구실 생존 MBTI", page_icon="🎓", layout="centered")
@@ -579,7 +592,7 @@ if st.session_state.step == 0:
         st.rerun()
     
     st.markdown(
-        "<p style='text-align: center; color: #aaa; font-size: 13px; margin-top: 10px;'>made by 대학원홍보단 ㅊㅇㄱ</p>",
+        "<p style='text-align: center; color: #aaa; font-size: 13px; margin-top: 10px;'>made by 대학원 홍보단 최원걸</p>",
         unsafe_allow_html=True
     )
 
@@ -632,18 +645,29 @@ elif 1 <= st.session_state.step <= 12:
 
 # (3) 로딩 화면
 elif st.session_state.step == 13 and st.session_state.loading:
+    # 통계 업데이트
+    mbti_temp = ""
+    mbti_temp += "E" if st.session_state.scores["E"] >= st.session_state.scores["I"] else "I"
+    mbti_temp += "D" if st.session_state.scores["D"] >= st.session_state.scores["T"] else "T"
+    mbti_temp += "P" if st.session_state.scores["P"] >= st.session_state.scores["A"] else "A"
+    mbti_temp += "S" if st.session_state.scores["S"] >= st.session_state.scores["F"] else "F"
+    stats = load_stats()
+    stats["total"] += 1
+    stats["types"][mbti_temp] = stats["types"].get(mbti_temp, 0) + 1
+    save_stats(stats)
+    count = stats["total"]
     st.markdown(
-        """
+        f"""
         <div class='loading-container'>
             <div class='spinner'></div>
-            <h2 style='color: #667eea; margin-top: 30px; font-size: 22px;'>🧬 당신의 DNA를 분석 중...</h2>
+            <h2 style='color: #667eea; margin-top: 30px; font-size: 22px;'>🧬 {count}번째 DNA 분석 중...</h2>
             <p style='color: #666; margin-top: 10px; font-size: 16px;'>잠시만 기다려주세요</p>
         </div>
         """,
         unsafe_allow_html=True
     )
     import time
-    time.sleep(2)  # 2초 대기
+    time.sleep(2)
     st.session_state.loading = False
     st.rerun()
 
@@ -658,6 +682,12 @@ else:
     result = results_map[mbti]
     st.balloons()
 
+    # 통계 로드
+    stats = load_stats()
+    total = stats["total"] if stats["total"] > 0 else 1
+    my_count = stats["types"].get(mbti, 0)
+    my_pct = round(my_count / total * 100, 1)
+
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     st.markdown(
         f"""
@@ -665,8 +695,10 @@ else:
             <h2 style='margin: 0; font-size: 20px; font-weight: 700;'>🎉 당신의 유형은</h2>
             <h1 style='margin: 15px 0; font-size: 24px; font-weight: 800;'>{result['name']}</h1>
             <p style='font-size: 48px; font-weight: 800; margin: 10px 0; letter-spacing: 5px;'>{mbti}</p>
+            <p style='font-size: 16px; margin: 8px 0; opacity: 0.95;'>전체 응시자 중 <b>{my_pct}%</b>가 같은 유형이에요!</p>
+            <p style='font-size: 13px; margin: 4px 0; opacity: 0.75;'>지금까지 총 {total}명이 테스트했어요 🚀</p>
         </div>
-        """, 
+        """,
         unsafe_allow_html=True
     )
 
@@ -821,19 +853,34 @@ else:
     
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     
-    # 링크 복사 버튼만 유지
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
+    # 인스타 버튼 (중앙)
+    col_i1, col_i2, col_i3 = st.columns([1, 2, 1])
+    with col_i2:
+        st.markdown(
+            "<a href='https://www.instagram.com/knu_monit?igsh=MWF4bnluN200Z2Exdw==' target='_blank'>"
+            "<button style='width:100%; border-radius:25px; padding:18px 20px; "
+            "background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); "
+            "color:white; font-size:16px; font-weight:600; border:none; cursor:pointer;'>"
+            "📸 대학원 홍보단 인스타</button></a>",
+            unsafe_allow_html=True
+        )
+
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+
+    # 다시 테스트 + 링크 복사
+    col_a, col_b = st.columns(2)
+    with col_a:
+        if st.button("🔄 다시 테스트하기"):
+            st.session_state.step = 0
+            st.session_state.scores = {"E": 0, "I": 0, "D": 0, "T": 0, "P": 0, "A": 0, "S": 0, "F": 0}
+            st.session_state.answer_history = []
+            st.session_state.loading = False
+            st.session_state.show_detail = False
+            st.rerun()
+    with col_b:
         share_url = "https://your-app-url.com"  # 실제 배포 URL로 변경
         if st.button("🔗 테스트 링크 복사하기"):
             st.code(share_url, language=None)
             st.success("링크를 복사해서 친구들과 공유하세요! 📤")
     
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
-    if st.button("🔄 다시 테스트하기"):
-        st.session_state.step = 0
-        st.session_state.scores = {"E": 0, "I": 0, "D": 0, "T": 0, "P": 0, "A": 0, "S": 0, "F": 0}
-        st.session_state.answer_history = []
-        st.session_state.loading = False
-        st.session_state.show_detail = False
-        st.rerun()
